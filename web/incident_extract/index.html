@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="utf-8">
+
+<!-- CSS styling -->
+<style>
+
+    .center-column {
+        /*margin-left: 15%;*/
+    }
+    select, .label {
+        font-size:11px;
+        font-family: Arial;
+    }
+    .datepicker {
+        width: 120px;
+        font-size: 11px;
+        font-family: Arial;
+    }
+    table {
+        table-layout: fixed;
+    }
+
+    .report_number { width:  50px;                   }
+    .crime_type    { width: 200px; text-align: left; }
+    .date          { width:  50px;                   }
+    .time          { width:  25px;                   }
+    .address       { width: 250px; text-align: left; }
+
+    table, th, td {    
+        border-bottom: 1px dotted black; 
+        border-collapse: collapse;
+        font-size: 10px;
+        font-family: Arial; 
+    }
+    thead th{
+        border-bottom: 2px solid black;
+    }
+    th, td { 
+        padding: 5px 20px 0px 0px; 
+    }
+    .table-body {
+        height: 600px;
+        width: 703px;
+        overflow: scroll;
+    }
+    tbody tr:nth-child(odd) {
+        background-color: #fff;
+    }
+    tbody tr:nth-child(even) {
+        background-color: #eef;
+    }
+
+    span#instructions {
+        font-size:10px;
+        color:red;
+    }
+</style>
+
+<h1 class="center-column">APD Incident Extract (YTD) Dashboard</h1>
+<hr class="center-column" width="703px" align="left">
+
+<!-- POST data input form -->
+
+<form id="header-form" class="center-column" method="post">
+    <span class="label">crime_type:</span> 
+    <select name="crime_type" onchange="this.form.submit()">
+        <option value="">ALL INCIDENTS</option>
+        {{crime_types}}
+    </select>
+
+    <span class="label">begin date: </span>
+        <input 
+            name="begin_date"
+            class="datepicker" 
+            type="date" 
+            value="{{begin_date}}" 
+            min="2016-01-01"
+            max="2016-12-31"
+            required
+        >
+
+    <span class="label">end date: </span>
+        <input 
+            name="end_date"
+            class="datepicker" 
+            type="date" 
+            value="{{end_date}}" 
+            min="2016-01-01"
+            max="2016-12-31"
+            required
+        >
+    <span id="instructions" style="visibility:hidden">Press Tab + Enter</span>
+    <br>
+    <span class="label">address: </span>
+    <input name="address" type="text" style="width:620px;margin:15px;">
+</form>
+
+<!-- Table data -->
+<div class="table-body">
+<table class="center-column">
+    <thead>
+        <tr>
+        {{table_headers}}
+        </tr>
+    </thead>
+    <tbody>
+        {{table_data}}
+    </tbody>
+</table>
+</div>
+
+<script>
+    let header_form = document.getElementById('header-form');
+    let tabPressed = false;
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key == 'Tab') 
+            tabPressed = true; 
+
+        if (event.key == 'Enter' && tabPressed) {
+            header_form.submit();
+            tabPressed = false;
+        }
+    });
+
+    document.getElementsByName('begin_date')[0].onchange = function() {
+        document.getElementById('instructions').style.visibility = "visible";
+    };
+
+    document.getElementsByName('end_date')[0].onchange = function() {
+        document.getElementById('instructions').style.visibility = "visible";
+    };
+
+</script>
+
+</html>
